@@ -4,37 +4,36 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.notificationtest.R;
 import com.example.notificationtest.entity.HomeResponse;
 import com.example.notificationtest.entity.HomeResultResponse;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FruitAdapter extends RecyclerView.Adapter<FruitAdapter.ViewHolder> {
     private List<HomeResultResponse> homeResponseList;
-
-    public FruitAdapter(List<HomeResultResponse> homeResponseList) {
+    private Context context;
+    private View view;
+    public FruitAdapter(List<HomeResultResponse> homeResponseList,Context context) {
         this.homeResponseList = homeResponseList;
+        this.context = context;
     }
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_fruit_adapter,parent,false);
-        final ViewHolder holder = new ViewHolder(view);
-        holder.fruitView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_fruit_adapter,parent,false);
 
-            }
-        });
+        final ViewHolder holder = new ViewHolder(view);
         return holder;
     }
 
@@ -43,7 +42,13 @@ public class FruitAdapter extends RecyclerView.Adapter<FruitAdapter.ViewHolder> 
 //        cell赋值
         HomeResultResponse homeResponse = homeResponseList.get(position);
         holder.fruitName.setText(homeResponse.getTitle());
-        holder.fruitPrice.setText(homeResponse.getPrice());
+        holder.fruitPrice.setText(homeResponse.getPrice().toString());
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(context,"视图被点击"+position,Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
