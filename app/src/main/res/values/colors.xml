@@ -10,4 +10,8 @@
     <color name="login_title">#373737</color>
     <color name="mobile_hint">#BDBDBD</color>
     <color name="main_color">#DD1A21</color>
+    <color name="font_color">#202020</color>
+    <color name="border_color">#F3CA84</color>
+    <color name="font2_color">#606060</color>
+    <color name="font3_color">#888888</color>
 </resources>

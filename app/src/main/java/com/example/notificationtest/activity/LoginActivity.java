@@ -37,7 +37,9 @@ public class LoginActivity extends BaseActivity {
         setContentView(R.layout.activity_login);
         loginBtn = (Button) findViewById(R.id.login_btn);
         accountEdit = (EditText) findViewById(R.id.mobile_edit);
+        accountEdit.setText("18122228878");
         pwdEdit = (EditText) findViewById(R.id.pwd_edit);
+        pwdEdit.setText("123456");
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

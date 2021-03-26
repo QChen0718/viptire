@@ -52,8 +52,21 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         recyclerView = (RecyclerView)findViewById(R.id.recycler_view);
         GridLayoutManager layoutManager = new GridLayoutManager(this,2);
+//        {
+//            @Override
+//            public boolean canScrollVertically() {
+////                直接禁止垂直滑动
+//                return false;
+//            }
+//        };
         layoutManager.setOrientation(RecyclerView.VERTICAL);
-//        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
+//        根据当前Item类型来判断占据的横向格数 当是head或者是footer时占满整个横屏
+        layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                return (adapter.isHeaderView(position)?layoutManager.getSpanCount():1);
+            }
+        });
         recyclerView.setLayoutManager(layoutManager);
         adapter = new FruitAdapter(homeResultResponses,this);
         recyclerView.setAdapter(adapter);
@@ -91,22 +104,22 @@ public class MainActivity extends AppCompatActivity {
                 BaseResponse baseResponse = (BaseResponse) res;
                 String json = gson.toJson(baseResponse.getData());
                 Log.d("MainActivity",json);
-                HomeResponse homeResponse = gson.fromJson(json,HomeResponse.class);
-                homeResultResponses.addAll(homeResponse.getResult());
+                if (baseResponse.getData() != null){
+                    HomeResponse homeResponse = gson.fromJson(json,HomeResponse.class);
+                    homeResultResponses.addAll(homeResponse.getResult());
 //                在UI线程中更新UI
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        adapter.notifyDataSetChanged();
-                        if (progressBar.getVisibility() == View.GONE){
-                            progressBar.setVisibility(View.VISIBLE);
-                        }else {
-                            progressBar.setVisibility(View.GONE);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            adapter.notifyDataSetChanged();
+                            if (progressBar.getVisibility() == View.GONE){
+                                progressBar.setVisibility(View.VISIBLE);
+                            }else {
+                                progressBar.setVisibility(View.GONE);
+                            }
                         }
-                    }
-                });
-
+                    });
+                }
             }
 
             @Override
@@ -115,4 +128,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+
 }
