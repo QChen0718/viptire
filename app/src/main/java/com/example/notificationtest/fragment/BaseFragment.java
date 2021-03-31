@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,6 +53,8 @@ public abstract class BaseFragment extends Fragment {
         Toast.makeText(getActivity(),msg,Toast.LENGTH_SHORT).show();
     }
     public void showToastSync(String msg){
-
+        Looper.prepare();
+        Toast.makeText(getActivity(),msg,Toast.LENGTH_SHORT).show();
+        Looper.loop();
     }
 }

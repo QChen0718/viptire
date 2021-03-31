@@ -1,133 +1,49 @@
 package com.example.notificationtest;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
-import androidx.loader.content.AsyncTaskLoader;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
-
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ProgressBar;
 
-import com.example.notificationtest.adapter.FruitAdapter;
-import com.example.notificationtest.api.Api;
-import com.example.notificationtest.api.ApiConfig;
-import com.example.notificationtest.api.TtitCallback;
+import com.example.notificationtest.activity.BaseActivity;
+import com.example.notificationtest.activity.HomeActivity;
+import com.example.notificationtest.activity.LoginActivity;
 import com.example.notificationtest.common.AppGlobal;
-import com.example.notificationtest.entity.BaseResponse;
-import com.example.notificationtest.entity.HomeResponse;
-import com.example.notificationtest.entity.HomeResultResponse;
-import com.google.gson.Gson;
+import com.example.notificationtest.util.StringUtils;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
-    private RecyclerView recyclerView;
-    private FruitAdapter adapter;
-    private List<HomeResultResponse> homeResultResponses= new ArrayList<>();
-    private Handler handler;
-    private ProgressBar progressBar;
+    private AppGlobal appGlobal;
+    private Button loginBtn;
+    private Button registerBtn;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        recyclerView = (RecyclerView)findViewById(R.id.recycler_view);
-        GridLayoutManager layoutManager = new GridLayoutManager(this,2);
-//        {
-//            @Override
-//            public boolean canScrollVertically() {
-////                直接禁止垂直滑动
-//                return false;
-//            }
-//        };
-        layoutManager.setOrientation(RecyclerView.VERTICAL);
-//        根据当前Item类型来判断占据的横向格数 当是head或者是footer时占满整个横屏
-        layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+    protected int initLayout() {
+        return R.layout.activity_main;
+    }
+
+    @Override
+    protected void initView() {
+        loginBtn = (Button) findViewById(R.id.btn_login);
+        registerBtn = (Button) findViewById(R.id.btn_register);
+        appGlobal = new AppGlobal(this);
+    }
+
+    @Override
+    protected void initData() {
+        if (!StringUtils.isEmpty(appGlobal.getToken())) {
+            navigateTo(HomeActivity.class);
+            finish();
+        }
+        loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public int getSpanSize(int position) {
-                return (adapter.isHeaderView(position)?layoutManager.getSpanCount():1);
+            public void onClick(View view) {
+                navigateTo(LoginActivity.class);
             }
         });
-        recyclerView.setLayoutManager(layoutManager);
-        adapter = new FruitAdapter(homeResultResponses,this);
-        recyclerView.setAdapter(adapter);
-        progressBar = (ProgressBar)findViewById(R.id.progress_bar);
-        loadData();
-
-    }
-    private void loadData(){
-        HashMap<String,Object> params = new HashMap<String, Object>();
-        params.put("cityId","1");
-        params.put("categoryCodes",new Object[0]);
-        params.put("brandCodes",new Object[0]);
-        params.put("commodityKeyword","");
-        params.put("minPrice","");
-        params.put("maxPrice","");
-        params.put("isShort","0");
-        params.put("shortName","createTime");
-        params.put("modelId","");
-        params.put("treadPattern",new Object[0]);
-        params.put("speedLevel",new Object[0]);
-        params.put("tireTread",new Object[0]);
-        params.put("flatnessRatio",new Object[0]);
-        params.put("diameter",new Object[0]);
-        params.put("antiExplosionType","2");
-        params.put("seasonType","2");
-        params.put("loadIndex","");
-        params.put("deviceNo","");
-        params.put("page","1");
-        params.put("pageSize","20");
-
-        Api.config(ApiConfig.PRODUCT_LIST,params).postRequest(this, new TtitCallback() {
+        registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onSuccess(Object res) {
-                Gson gson = new Gson();
-                BaseResponse baseResponse = (BaseResponse) res;
-                String json = gson.toJson(baseResponse.getData());
-                Log.d("MainActivity",json);
-                if (baseResponse.getData() != null){
-                    HomeResponse homeResponse = gson.fromJson(json,HomeResponse.class);
-                    homeResultResponses.addAll(homeResponse.getResult());
-//                在UI线程中更新UI
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            adapter.notifyDataSetChanged();
-                            if (progressBar.getVisibility() == View.GONE){
-                                progressBar.setVisibility(View.VISIBLE);
-                            }else {
-                                progressBar.setVisibility(View.GONE);
-                            }
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onFailure(Exception e) {
+            public void onClick(View view) {
 
             }
         });
     }
-
-
 }

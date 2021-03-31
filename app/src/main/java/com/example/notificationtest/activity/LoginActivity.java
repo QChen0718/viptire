@@ -37,7 +37,7 @@ public class LoginActivity extends BaseActivity {
         setContentView(R.layout.activity_login);
         loginBtn = (Button) findViewById(R.id.login_btn);
         accountEdit = (EditText) findViewById(R.id.mobile_edit);
-        accountEdit.setText("18122228878");
+        accountEdit.setText("18721375555");
         pwdEdit = (EditText) findViewById(R.id.pwd_edit);
         pwdEdit.setText("123456");
         loginBtn.setOnClickListener(new View.OnClickListener() {
@@ -72,34 +72,34 @@ public class LoginActivity extends BaseActivity {
         if (StringUtils.isEmpty(pwd)){
             showToast("密码不能为空");
         }
-        navigateTo(HomeActivity.class);
-//        HashMap<String,Object> params = new HashMap<String, Object>();
-//        params.put("username",account);
-//        params.put("password",pwd);
-//        params.put("type",0);
-//        params.put("appId",10);
-//        Api.config(ApiConfig.LOGIN,params).postRequest(this, new TtitCallback() {
-//            @Override
-//            public void onSuccess(Object res) {
-////                Log.e("onSuccess",res.toString());
-//                Gson gson = new Gson();
-//                BaseResponse baseResponse = (BaseResponse) res;
-//                String json = gson.toJson(baseResponse.getData());
-//                LoginResponse loginResponse =
-//                        gson.fromJson(json,LoginResponse.class);
-//                Log.d("----->",loginResponse.getUsername());
-//                Looper.prepare();
-//                AppGlobal appGlobal = new AppGlobal();
-//                appGlobal.saveUserInfo(LoginActivity.this,loginResponse.getResult());
-//                showToast("请求成功");
-//                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//                startActivity(intent);
-//                Looper.loop();
-//            }
-//            @Override
-//            public void onFailure(Exception e) {
-//
-//            }
-//        });
+//        navigateTo(HomeActivity.class);
+        HashMap<String,Object> params = new HashMap<String, Object>();
+        params.put("username",account);
+        params.put("password",pwd);
+        params.put("type",0);
+        params.put("appId",10);
+        Api.config(ApiConfig.LOGIN,params).postRequest(this, new TtitCallback() {
+            @Override
+            public void onSuccess(Object res) {
+//                Log.e("onSuccess",res.toString());
+                Gson gson = new Gson();
+                BaseResponse baseResponse = (BaseResponse) res;
+                String json = gson.toJson(baseResponse.getData());
+                LoginResponse loginResponse =
+                        gson.fromJson(json,LoginResponse.class);
+                Log.d("----->",loginResponse.getUsername());
+                Looper.prepare();
+                AppGlobal appGlobal = new AppGlobal(LoginActivity.this);
+                appGlobal.saveUserInfo(LoginActivity.this,loginResponse.getResult());
+                showToast("请求成功");
+                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                startActivity(intent);
+                Looper.loop();
+            }
+            @Override
+            public void onFailure(Exception e) {
+
+            }
+        });
     }
 }

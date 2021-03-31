@@ -9,8 +9,8 @@ public class AppGlobal {
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
 
-    public AppGlobal() {
-        
+    public AppGlobal(Context context) {
+        pref = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     public void saveUserInfo(Context context, String token){

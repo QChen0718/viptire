@@ -16,12 +16,12 @@ import com.flyco.tablayout.listener.OnTabSelectListener;
 import java.util.ArrayList;
 
 public class HomeActivity extends BaseActivity{
-    private String[] mTitles = {"首页","资讯","我的"};
+    private String[] mTitles = {"首页","购物车","我"};
     private int[] mIconUnselectIds = {
-            R.mipmap.home_unselect,R.mipmap.collect_unselect,R.mipmap.my_unselect
+            R.mipmap.icon_home,R.mipmap.icon_shop_car,R.mipmap.icon_me
     };
     private int[] mIconSelectIds = {
-            R.mipmap.home_selected,R.mipmap.collect_selected,R.mipmap.my_selected
+            R.mipmap.icon_home_select,R.mipmap.icon_shop_car_select,R.mipmap.icon_me_select
     };
     private ArrayList<Fragment> mFragments = new ArrayList<>();
     private ArrayList<CustomTabEntity> mTabEntities = new ArrayList<>();
