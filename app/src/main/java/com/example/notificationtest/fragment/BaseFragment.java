@@ -1,5 +1,6 @@
 package com.example.notificationtest.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -56,5 +57,9 @@ public abstract class BaseFragment extends Fragment {
         Looper.prepare();
         Toast.makeText(getActivity(),msg,Toast.LENGTH_SHORT).show();
         Looper.loop();
+    }
+    public void navigateTo(Class cls) {
+        Intent in = new Intent(getActivity(),cls);
+        startActivity(in);
     }
 }

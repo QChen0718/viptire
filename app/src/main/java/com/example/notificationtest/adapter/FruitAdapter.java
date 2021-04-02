@@ -83,7 +83,7 @@ public class FruitAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 }
             });
         }else if (holder instanceof HeadViewHolder){
-            ((HeadViewHolder) holder).headText.setText("测试一下");
+//            ((HeadViewHolder) holder).headText.setText("测试一下");
         }
 
     }
