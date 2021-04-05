@@ -16,10 +16,15 @@
         app:navigationIcon="@mipmap/icon_back">
 
     </androidx.appcompat.widget.Toolbar>
-    <TextView
+    <com.flyco.tablayout.SlidingTabLayout
+        android:id="@+id/slidingTabLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="产品界面"
-        android:textColor="@color/main_color"
-        android:textSize="20sp"/>
+        android:layout_height="50dp"
+        app:tl_textsize="16sp"
+        app:tl_indicator_corner_radius="1.5dp"
+        app:tl_indicator_height="3dp"
+        app:tl_indicator_width="17dp"
+        app:tl_textSelectColor="#fdf299"
+        app:tl_textUnselectColor="@color/white"
+        app:tl_indicator_color="#fdf299"/>
 </LinearLayout>

@@ -2,6 +2,7 @@ package com.example.notificationtest.fragment;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,6 +23,9 @@ import com.example.notificationtest.entity.BaseResponse;
 import com.example.notificationtest.entity.HomeResponse;
 import com.example.notificationtest.entity.HomeResultResponse;
 import com.google.gson.Gson;
+import com.scwang.smart.refresh.layout.api.RefreshLayout;
+import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
+import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,6 +43,7 @@ public class HomeFragment extends BaseFragment {
     private List<HomeResultResponse> homeResultResponses= new ArrayList<>();
     private Handler handler;
     private ProgressBar progressBar;
+    private RefreshLayout refreshLayout;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -75,7 +80,7 @@ public class HomeFragment extends BaseFragment {
         recyclerView = (RecyclerView)mRootView.findViewById(R.id.recycler_view);
         adapter = new FruitAdapter(homeResultResponses,getContext());
         progressBar = (ProgressBar)mRootView.findViewById(R.id.progress_bar);
-
+        refreshLayout = (RefreshLayout)mRootView.findViewById(R.id.refreshLayout);
     }
 
     @Override
@@ -91,6 +96,21 @@ public class HomeFragment extends BaseFragment {
         });
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
+//        刷新回调方法
+        refreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(@NonNull RefreshLayout refreshLayout) {
+                loadData();
+                refreshLayout.finishRefresh(true/*,false*/);//传入false表示刷新失败
+            }
+        });
+//        加载回调方法
+        refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
+                refreshLayout.finishLoadMore(true/*,false*/);//传入false表示加载失败
+            }
+        });
         loadData();
     }
     private void loadData(){
