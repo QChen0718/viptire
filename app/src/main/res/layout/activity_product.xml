@@ -11,7 +11,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_44dp"
-        app:title="产品"
+        app:title="我的订单"
         android:background="@color/main_color"
         app:navigationIcon="@mipmap/icon_back">
 
@@ -23,8 +23,14 @@
         app:tl_textsize="16sp"
         app:tl_indicator_corner_radius="1.5dp"
         app:tl_indicator_height="3dp"
-        app:tl_indicator_width="17dp"
-        app:tl_textSelectColor="#fdf299"
-        app:tl_textUnselectColor="@color/white"
-        app:tl_indicator_color="#fdf299"/>
+        app:tl_indicator_width_equal_title="true"
+        app:tl_textSelectColor="@color/main_color"
+        app:tl_textUnselectColor="@color/black"
+        app:tl_indicator_color="@color/main_color"
+        android:background="@color/white"/>
+    <com.example.notificationtest.view.FixedViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#f5f5f5"/>
 </LinearLayout>
