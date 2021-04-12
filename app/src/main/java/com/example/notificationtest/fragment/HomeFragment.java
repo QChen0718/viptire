@@ -51,6 +51,8 @@ public class HomeFragment extends BaseFragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private int pageSize;
+    private int pageNum;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -81,6 +83,8 @@ public class HomeFragment extends BaseFragment {
         adapter = new FruitAdapter(homeResultResponses,getContext());
         progressBar = (ProgressBar)mRootView.findViewById(R.id.progress_bar);
         refreshLayout = (RefreshLayout)mRootView.findViewById(R.id.refreshLayout);
+        pageSize = 20;
+        pageNum = 1;
     }
 
     @Override
@@ -100,20 +104,21 @@ public class HomeFragment extends BaseFragment {
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-                loadData();
-                refreshLayout.finishRefresh(true/*,false*/);//传入false表示刷新失败
+                pageNum = 1;
+                loadData(true);
             }
         });
 //        加载回调方法
         refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
-                refreshLayout.finishLoadMore(true/*,false*/);//传入false表示加载失败
+                pageNum ++ ;
+                loadData(false);
             }
         });
-        loadData();
+        loadData(true);
     }
-    private void loadData(){
+    private void loadData(Boolean isRefresh){
         HashMap<String,Object> params = new HashMap<String, Object>();
         params.put("cityId","1");
         params.put("categoryCodes",new Object[0]);
@@ -133,12 +138,18 @@ public class HomeFragment extends BaseFragment {
         params.put("seasonType","2");
         params.put("loadIndex","");
         params.put("deviceNo","");
-        params.put("page","1");
-        params.put("pageSize","20");
-
+        params.put("page",pageNum);
+        params.put("pageSize",pageSize);
+        progressBar.setVisibility(View.VISIBLE);
         Api.config(ApiConfig.PRODUCT_LIST,params).postRequest(getContext(), new TtitCallback() {
             @Override
             public void onSuccess(Object res) {
+                if (isRefresh){
+                    refreshLayout.finishRefresh(true/*,false*/);//传入false表示刷新失败
+                }else {
+                    refreshLayout.finishLoadMore(true);
+                }
+
                 Gson gson = new Gson();
                 BaseResponse baseResponse = (BaseResponse) res;
                 if (baseResponse.getCode() == 0){
@@ -146,17 +157,18 @@ public class HomeFragment extends BaseFragment {
                     Log.d("MainActivity",json);
                     if (baseResponse.getData() != null){
                         HomeResponse homeResponse = gson.fromJson(json,HomeResponse.class);
-                        homeResultResponses.addAll(homeResponse.getResult());
+                        if (isRefresh){
+                            homeResultResponses.clear();
+                            homeResultResponses.addAll(homeResponse.getResult());
+                        }else {
+                            homeResultResponses.addAll(homeResponse.getResult());
+                        }
 //                在UI线程中更新UI
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 adapter.notifyDataSetChanged();
-                                if (progressBar.getVisibility() == View.GONE){
-                                    progressBar.setVisibility(View.VISIBLE);
-                                }else {
-                                    progressBar.setVisibility(View.GONE);
-                                }
+                                progressBar.setVisibility(View.GONE);
                             }
                         });
                     }
@@ -165,11 +177,7 @@ public class HomeFragment extends BaseFragment {
                         @Override
                         public void run() {
                             adapter.notifyDataSetChanged();
-                            if (progressBar.getVisibility() == View.GONE){
-                                progressBar.setVisibility(View.VISIBLE);
-                            }else {
-                                progressBar.setVisibility(View.GONE);
-                            }
+                            progressBar.setVisibility(View.GONE);
                         }
                     });
                     showToastSync(baseResponse.getMsg());
@@ -178,7 +186,12 @@ public class HomeFragment extends BaseFragment {
 
             @Override
             public void onFailure(Exception e) {
-
+                progressBar.setVisibility(View.GONE);
+                if (isRefresh){
+                    refreshLayout.finishRefresh(true/*,false*/);//传入false表示刷新失败
+                }else {
+                    refreshLayout.finishLoadMore(true);
+                }
             }
         });
     }

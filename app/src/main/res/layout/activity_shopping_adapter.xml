@@ -11,7 +11,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginTop="30dp"
         android:layout_marginRight="10dp"
-        android:background="@mipmap/icon_tik_act"/>
+        android:background="@mipmap/icon_tik_nor"/>
     <ImageView
         android:id="@+id/shopping_logo"
         android:layout_width="60dp"
@@ -23,6 +23,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
         <TextView
+            android:id="@+id/shopping_title"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:text="壳牌 黄壳黄喜力 HX5 PLUS SN级半合成10w-40 4升"

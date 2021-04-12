@@ -47,7 +47,7 @@ public class ShoppingCarFragment extends BaseFragment {
         recyclerView = (RecyclerView) mRootView.findViewById(R.id.shopping_recycler);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
-        ShoppingAdapter shoppingAdapter = new ShoppingAdapter();
+        ShoppingAdapter shoppingAdapter = new ShoppingAdapter(getContext());
         recyclerView.setAdapter(shoppingAdapter);
         refreshLayout = (RefreshLayout) mRootView.findViewById(R.id.refreshLayout);
 //        刷新回调方法

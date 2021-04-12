@@ -1,5 +1,6 @@
 package com.example.notificationtest.fragment;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -9,8 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.notificationtest.R;
 import com.example.notificationtest.activity.ProductActivity;
@@ -40,6 +45,10 @@ public class MyFragment extends BaseFragment {
     private View itemView;
     private ImageView imageView;
     private TextView textView;
+    private LinearLayout linearLayout;
+    private LinearLayout linearLayout2;
+    private AlertDialog alertDialog;
+    private AlertDialog.Builder builder;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -80,6 +89,50 @@ public class MyFragment extends BaseFragment {
         viewStubs.add(viewStub3);
         viewStubs.add(viewStub4);
         viewStubs.add(viewStub5);
+
+        builder = new AlertDialog.Builder(getContext());
+//        获取布局
+        View view = View.inflate(getActivity(),R.layout.custom_view,null);
+        final EditText username = (EditText)view.findViewById(R.id.username);
+        final EditText password = (EditText)view.findViewById(R.id.password);
+        final Button button = (Button) view.findViewById(R.id.btn_login);
+
+//        设置参数
+        builder.setTitle("Login").setIcon(R.drawable.ic_launcher_background).setView(view);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String name = username.getText().toString().trim();
+                String psd = password.getText().toString().trim();
+                if (name.equals("123") && psd.equals("123")){
+                    showToast("登录成功");
+                }
+                showToast("登录失败");
+
+            }
+        });
+
+        linearLayout = (LinearLayout) mRootView.findViewById(R.id.address_manager);
+        linearLayout2 = (LinearLayout) mRootView.findViewById(R.id.exit_login);
+
+        linearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                builder.show();
+            }
+        });
+        linearLayout2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+                alert.setMessage("您确认要退出登录");
+                alert.setPositiveButton("确定",null);
+                alert.setNeutralButton("取消",null);
+                alertDialog = alert.create();
+                alertDialog.show();
+            }
+        });
     }
 
     @Override
