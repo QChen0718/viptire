@@ -5,7 +5,9 @@
     android:layout_height="match_parent"
     tools:context=".fragment.MyFragment"
     android:background="@color/page_bg_color"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:foreground="@drawable/dim"
+    android:id="@+id/container">
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="228dp"

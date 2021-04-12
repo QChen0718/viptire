@@ -1,11 +1,15 @@
 package com.example.notificationtest.fragment;
 
 import android.app.AlertDialog;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +18,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,6 +55,9 @@ public class MyFragment extends BaseFragment {
     private LinearLayout linearLayout2;
     private AlertDialog alertDialog;
     private AlertDialog.Builder builder;
+    private View popView;
+    private PopupWindow popupWindow;
+    private RelativeLayout mContainer;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -76,8 +85,11 @@ public class MyFragment extends BaseFragment {
         return R.layout.fragment_my;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void initView() {
+        mContainer = mRootView.findViewById(R.id.container);
+        mContainer.getForeground().setAlpha(0);
         viewStub = (ViewStub) mRootView.findViewById(R.id.item1);
         viewStub2 = (ViewStub) mRootView.findViewById(R.id.item2);
         viewStub3 = (ViewStub) mRootView.findViewById(R.id.item3);
@@ -89,6 +101,10 @@ public class MyFragment extends BaseFragment {
         viewStubs.add(viewStub3);
         viewStubs.add(viewStub4);
         viewStubs.add(viewStub5);
+
+        popView = LayoutInflater.from(getActivity()).inflate(R.layout.bottom_pop_view,null);
+        popupWindow = new PopupWindow(popView,ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT,true);
+        View myView = LayoutInflater.from(getActivity()).inflate(R.layout.activity_home,null);
 
         builder = new AlertDialog.Builder(getContext());
 //        获取布局
@@ -123,14 +139,24 @@ public class MyFragment extends BaseFragment {
             }
         });
         linearLayout2.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
-                alert.setMessage("您确认要退出登录");
-                alert.setPositiveButton("确定",null);
-                alert.setNeutralButton("取消",null);
-                alertDialog = alert.create();
-                alertDialog.show();
+//                AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+//                alert.setMessage("您确认要退出登录");
+//                alert.setPositiveButton("确定",null);
+//                alert.setNeutralButton("取消",null);
+//                alertDialog = alert.create();
+//                alertDialog.show();
+                mContainer.getForeground().setAlpha(127);
+                popupWindow.showAtLocation(myView, Gravity.BOTTOM,0,0);
+                popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.M)
+                    @Override
+                    public void onDismiss() {
+                        mContainer.getForeground().setAlpha(0);
+                    }
+                });
             }
         });
     }
